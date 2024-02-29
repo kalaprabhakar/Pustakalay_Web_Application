@@ -1,0 +1,55 @@
+package com.kuu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
+import com.kuu.beans.Book_Order;
+import com.kuu.factories.ConnectionFactory;
+
+public class BookOrderDAOImpl implements IBookOrderADO {
+	
+	private static final String BOOK_ORDER = "SELECT * FROM BOOK_ORDER";
+	private static final String SAVE_ORDER = "INSERT INTO BOOK_ORDER( )";
+
+	@Override
+	public int getOrderNo() {
+		
+		int i = 0;
+		
+		try {
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(BOOK_ORDER);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				i++;
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return i;
+	}
+
+	@Override
+	public boolean saveOrder(Book_Order book) {
+		
+		boolean flag = false ;
+		
+		try {
+			
+			Connection con  = ConnectionFactory.getConnection();
+			PreparedStatement ps  = con.prepareStatement(SAVE_ORDER);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return false;
+	}
+
+}

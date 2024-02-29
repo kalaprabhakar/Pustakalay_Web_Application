@@ -1,0 +1,395 @@
+package com.kuu.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.kuu.beans.BookDetails;
+import com.kuu.factories.ConnectionFactory;
+
+public class BookDAOImpl implements IBooksDAO {
+
+	private static final String INSERT_SQL_QUERY = "INSERT INTO BOOK_DTLS(BOOKNAME,AUTHOR,PRICE,BOOKCATEGORY,STATUS,PHOTO,EMAIL) VALUES(?,?,?,?,?,?,?)";
+	private static final String SELECT_SQL_QUERY  = "SELECT * FROM BOOK_DTLS";
+	private static final String SELECT_SQL_QUERY1 = "SELECT * FROM BOOK_DTLS WHERE BOOKID = ?";
+	private static final String UPDATE_SQL_QUERY = "UPDATE BOOK_DTLS SET BOOKNAME= ? , AUTHOR = ? , PRICE = ? , STATUS = ? WHERE BOOKID = ?";
+	private static final String DELETE_SQL_QUERY = "DELETE FROM BOOK_DTLS WHERE BOOKID = ?";
+	private static final String SELECT_SQL_QUERY2 = "SELECT * FROM BOOK_DTLS WHERE BOOKCATEGORY = ? AND STATUS = ? ORDER BY  BOOKID DESC";
+	private static final String SELECT_SQL_QUERY3 = "SELECT * FROM BOOK_DTLS WHERE STATUS = ? ORDER BY BOOKID DESC";
+	private static final String GET_OLD_BOOK = "SELECT * FROM BOOK_DTLS WHERE BOOKCATEGORY = ? AND EMAIL =?"; 
+	
+	@Override
+	public boolean addBook(BookDetails book) {
+		boolean flag = false;
+		try {
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(INSERT_SQL_QUERY);
+			ps.setString(1,book.getBookname());
+			ps.setString(2, book.getAuthor());
+			ps.setDouble(3, book.getPrice());
+			ps.setString(4, book.getBookCategory());
+			ps.setString(5, book.getStatus());
+			ps.setString(6, book.getPhotoName());
+			ps.setString(7, book.getEmial());
+			
+			int rowSet = ps.executeUpdate();
+			if(rowSet ==1) {
+				flag = true;
+				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
+	@Override
+	public List<BookDetails> getAllBooks() {
+		
+		List<BookDetails> list = new ArrayList<BookDetails>();
+		try {
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps =conn.prepareStatement(SELECT_SQL_QUERY);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				BookDetails book = new BookDetails();
+				book.setBookId(rs.getInt(1));
+				book.setBookname(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getDouble(4));
+				book.setBookCategory(rs.getString(5));
+				book.setStatus(rs.getString(6));
+				book.setPhotoName(rs.getString(7));
+				book.setEmial(rs.getString(8));
+				
+				list.add(book);
+			
+			}
+			
+		}catch (Exception e) {
+			
+		}
+		return list;
+	}
+	@Override
+	public BookDetails getBookById(int id) {
+		
+		BookDetails book = null;
+		try {
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(SELECT_SQL_QUERY1);
+			
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+			    book = new BookDetails();
+				book.setBookId(rs.getInt(1));
+				book.setBookname(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getDouble(4));
+				book.setBookCategory(rs.getString(5));
+				book.setStatus(rs.getString(6));
+				book.setPhotoName(rs.getString(7));
+				book.setEmial(rs.getString(8));
+				
+				
+			
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return book;
+	}
+	@Override
+	public boolean updateEditBooks(BookDetails book) {
+		
+		boolean flag = false;
+		try {
+			
+			
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(UPDATE_SQL_QUERY);
+			
+			ps.setString(1, book.getBookname());
+			ps.setString(2, book.getAuthor());
+			ps.setDouble(3, book.getPrice());
+			ps.setString(4, book.getStatus());
+			ps.setInt(5, book.getBookId());
+			
+			int rowCount = ps.executeUpdate();
+			
+			if(rowCount==1) {
+				flag = true;
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return flag ;
+		
+	}
+	@Override
+	public boolean deleteBooks(int id) {
+		boolean flag = false ;
+		
+		try {
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(DELETE_SQL_QUERY);
+			
+			ps.setInt(1, id);
+			
+			int rowCount = ps.executeUpdate();
+			
+			if(rowCount ==1) {
+				flag=  true;
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
+	@Override
+	public List<BookDetails> getNewBook() {
+		
+		
+		List<BookDetails> list = new ArrayList<BookDetails>();
+		BookDetails book  = null;
+		try {
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(SELECT_SQL_QUERY2);
+			ps.setString(1, "New");
+			ps.setString(2, "Active");
+			
+			ResultSet rs = ps.executeQuery();
+			int i = 1 ;
+			while(rs.next() && i <= 4) {
+				
+				book =  new BookDetails();
+				book.setBookId(rs.getInt(1));
+				book.setBookname(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getDouble(4));
+				book.setBookCategory(rs.getString(5));
+				book.setStatus(rs.getString(6));
+				book.setPhotoName(rs.getString(7));
+				book.setEmial(rs.getString(8));
+				
+				list.add(book);
+				i++;
+				
+				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	@Override
+	public List<BookDetails> getRecentBook() {
+		List<BookDetails> list = new ArrayList<BookDetails>();
+		BookDetails book  = null;
+		try {
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(SELECT_SQL_QUERY3);
+			ps.setString(1, "Active");
+			
+			
+			ResultSet rs = ps.executeQuery();
+			int i = 1 ;
+			while(rs.next() && i <= 4) {
+				
+				book =  new BookDetails();
+				book.setBookId(rs.getInt(1));
+				book.setBookname(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getDouble(4));
+				book.setBookCategory(rs.getString(5));
+				book.setStatus(rs.getString(6));
+				book.setPhotoName(rs.getString(7));
+				book.setEmial(rs.getString(8));
+				
+				list.add(book);
+				i++;
+				
+				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+		
+	}
+	@Override
+	public List<BookDetails> getOldBook() {
+		List<BookDetails> list = new ArrayList<BookDetails>();
+		BookDetails book  = null;
+		try {
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(SELECT_SQL_QUERY2);
+			ps.setString(1, "Old");
+			ps.setString(2, "Active");
+			
+			ResultSet rs = ps.executeQuery();
+			int i = 1 ;
+			while(rs.next() && i <= 4) {
+				
+				book =  new BookDetails();
+				book.setBookId(rs.getInt(1));
+				book.setBookname(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getDouble(4));
+				book.setBookCategory(rs.getString(5));
+				book.setStatus(rs.getString(6));
+				book.setPhotoName(rs.getString(7));
+				book.setEmial(rs.getString(8));
+				
+				list.add(book);
+				i++;
+				
+				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	@Override
+	public List<BookDetails> getAllRecentBook() {
+		List<BookDetails> list = new ArrayList<BookDetails>();
+		BookDetails book  = null;
+		try {
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(SELECT_SQL_QUERY3);
+			ps.setString(1, "Active");
+			
+			
+			ResultSet rs = ps.executeQuery();
+			int i = 1 ;
+			while(rs.next()) {
+				
+				book =  new BookDetails();
+				book.setBookId(rs.getInt(1));
+				book.setBookname(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getDouble(4));
+				book.setBookCategory(rs.getString(5));
+				book.setStatus(rs.getString(6));
+				book.setPhotoName(rs.getString(7));
+				book.setEmial(rs.getString(8));
+				
+				list.add(book);
+				
+				
+				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+		
+	}
+	@Override
+	public List<BookDetails> getAllNewBook() {
+		List<BookDetails> list = new ArrayList<BookDetails>();
+		BookDetails book  = null;
+		try {
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(SELECT_SQL_QUERY2);
+			ps.setString(1, "New");
+			ps.setString(2, "Active");
+			
+			ResultSet rs = ps.executeQuery();
+			int i = 1 ;
+			while(rs.next() ) {
+				
+				book =  new BookDetails();
+				book.setBookId(rs.getInt(1));
+				book.setBookname(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getDouble(4));
+				book.setBookCategory(rs.getString(5));
+				book.setStatus(rs.getString(6));
+				book.setPhotoName(rs.getString(7));
+				book.setEmial(rs.getString(8));
+				
+				list.add(book);
+				
+				
+				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+		
+	}
+	@Override
+	public List<BookDetails> getAllOldBook() {
+		List<BookDetails> list = new ArrayList<BookDetails>();
+		BookDetails book  = null;
+		try {
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(SELECT_SQL_QUERY2);
+			ps.setString(1, "Old");
+			ps.setString(2, "Active");
+			
+			ResultSet rs = ps.executeQuery();
+			int i = 1 ;
+			while(rs.next() && i <= 4) {
+				
+				book =  new BookDetails();
+				book.setBookId(rs.getInt(1));
+				book.setBookname(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setPrice(rs.getDouble(4));
+				book.setBookCategory(rs.getString(5));
+				book.setStatus(rs.getString(6));
+				book.setPhotoName(rs.getString(7));
+				book.setEmial(rs.getString(8));
+				
+				list.add(book);
+				i++;
+				
+				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	@Override
+	public List<BookDetails> getBookByOld(String email, String cate) {
+		List<BookDetails> list = new ArrayList<BookDetails>();
+		
+		try {
+			
+			Connection conn = ConnectionFactory.getConnection();
+			PreparedStatement ps = conn.prepareStatement(GET_OLD_BOOK);
+			
+			ps.setString(1, cate);
+			ps.setShort(2, email);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+}

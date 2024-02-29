@@ -1,0 +1,267 @@
+<%@page import="com.kuu.beans.UserBO"%>
+<%@page import="com.kuu.beans.BookDetails"%>
+<%@page import="java.util.List"%>
+<%@page import="com.kuu.dao.BookDAOImpl"%>
+<%@page import="java.sql.Connection"%>
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<%@ include file="all_component/allcss.jsp"%>
+<style type="text/css">
+.back-img {
+	background: url("images/book1.jpg");
+	height: 50vh;
+	width: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.crd-ho:hover {
+	background: #baaba9;
+}
+</style>
+</head>
+<body style="background-color: #f7e7e6">
+<% 
+
+   UserBO user =(UserBO)session.getAttribute("userobj") ;
+
+%>
+	<%@ include file="all_component/navbar.jsp"%>
+	//carousel
+	<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="..." alt="First slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="..." alt="Second slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="..." alt="Third slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+	<!-- Start Recent Book -->
+	<div class="container">
+		<h3 class="text-center">Recent Book</h3>
+		<div class="row">
+
+			<%
+			BookDAOImpl dao2 = new BookDAOImpl();
+			List<BookDetails> list2 = dao2.getRecentBook();
+			for (BookDetails book2 : list2) {
+			%>
+			<div class="col-md-3.5">
+
+
+				<div class="card">
+					<div class="card-body text-center">
+						<img alt="" src="books/<%=book2.getPhotoName()%>"
+							style="width: 150px; height: 200px" class="img-thumblin">
+						<p><%=book2.getBookname()%></p>
+						<p><%=book2.getAuthor()%></p>
+						<p>
+							<%
+							if (book2.getBookCategory().equalsIgnoreCase("Old")) {
+							%>
+
+							Categories :
+							<%=book2.getBookCategory()%></p>
+						<div class="row">
+							<a href="view_books.jsp?bid=<%=book2.getBookId() %>" class="btn btn-success btn-sm ml-1">View Details</a> <a
+								href="" class="btn btn-danger btn-sm ml-1"><%=book2.getPrice()%>
+								<i class="fa-solid fa-indian-rupee-sign"></i></a>
+
+						</div>
+
+						<%
+						} else {
+						%>
+
+						Categories :
+						<%=book2.getBookCategory()%></p>
+						<div class="row">
+						
+						<%
+						
+						if(user==null){
+							
+							%>
+							<a href="login.jsp" class="btn btn-danger btn-sm ml-1"><i
+								class="fa-solid fa-cart-shopping"></i>Add Cart</a>
+							<%
+						}else{
+							%>
+							<a href="cart?bid=<%=book2.getBookId() %>&&uid=<%=user.getId() %>" class="btn btn-danger btn-sm ml-1"><i
+								class="fa-solid fa-cart-shopping"></i>Add Cart</a>
+							<%
+						}
+						
+						
+						%>
+							
+								<a href="view_books.jsp?bid=<%=book2.getBookId() %>"
+								class="btn btn-success btn-sm ml-1">View Details</a>
+								 <a href="" class="btn btn-danger btn-sm ml-1"><%=book2.getPrice()%> <i
+								class="fa-solid fa-indian-rupee-sign"></i></a>
+
+						</div>
+
+						<%
+						}
+						%>
+
+
+					</div>
+				</div>
+			</div>
+
+			<%
+			}
+			%>
+
+
+
+		</div>
+		<div class="text-center mt-1">
+			<a href="" class="btn btn-danger btn-sm text-white"> View All</a>
+
+		</div>
+	</div>
+	<!-- End Recent Book -->
+	<hr>
+	<!-- Start New Book -->
+	<div class="container">
+		<h3 class="text-center">New Book</h3>
+		<div class="row">
+
+			<%
+			BookDAOImpl dao = new BookDAOImpl();
+			List<BookDetails> list = dao.getNewBook();
+			for (BookDetails books : list) {
+			%>
+			<div class="col-md-3.5">
+				<div class="card">
+					<div class="card-body text-center">
+						<img alt="" src="books/<%=books.getPhotoName()%>"
+							style="width: 150px; height: 200px" class="img-thumblin">
+						<p><%=books.getBookname()%></p>
+						<p><%=books.getAuthor()%></p>
+						<p>
+							Categories :
+							<%=books.getBookCategory()%></p>
+						<div class="row">
+						
+						<%
+						
+						if(user==null){
+							
+							%>
+							<a href="login.jsp" class="btn btn-danger btn-sm ml-1"><i
+								class="fa-solid fa-cart-shopping"></i>Add Cart</a>
+							<%
+						}else{
+							%>
+							<a href="cart?bid=<%=books.getBookId() %>&&uid=<%=user.getId() %>" class="btn btn-danger btn-sm ml-1"><i
+								class="fa-solid fa-cart-shopping"></i>Add Cart</a>
+							<%
+						}
+						
+						
+						%>
+							
+								<a href="view_books.jsp?bid=<%=books.getBookId() %>"
+								class="btn btn-success btn-sm ml-1">View Details</a>
+							 <a href=""
+								class="btn btn-danger btn-sm ml-1"><%=books.getPrice()%> <i
+								class="fa-solid fa-indian-rupee-sign"></i></a>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<%
+			}
+			%>
+
+
+
+
+		</div>
+		<div class="text-center mt-1">
+			<a href="" class="btn btn-danger btn-sm text-white"> View All</a>
+
+		</div>
+	</div>
+	<!-- End New Book -->
+	<hr>
+	<!-- Start Old Book -->
+	<div class="container">
+		<h3 class="text-center">Old Book</h3>
+		<div class="row">
+			<%
+			BookDAOImpl dao3 = new BookDAOImpl();
+			List<BookDetails> list3 = dao3.getOldBook();
+			for (BookDetails book3 : list3) {
+			%>
+
+			<div class="col-md-3">
+
+				<div class="card">
+					<div class="card-body text-center">
+						<img alt="" src="books/<%=book3.getPhotoName()%>"
+							style="width: 150px; height: 200px" class="img-thumblin">
+						<p><%=book3.getBookname()%></p>
+						<p><%=book3.getAuthor()%></p>
+						<p>
+							Categories :
+							<%=book3.getBookCategory()%></p>
+						<div class="row">
+
+							<a href="view_books.jsp?bid=<%=book3.getBookId() %>" class="btn btn-success btn-sm ml-5">View Details</a> <a
+								href="" class="btn btn-danger btn-sm ml-1"><%=book3.getPrice()%>
+								<i class="fa-solid fa-indian-rupee-sign"></i></a>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<%
+			}
+			%>
+
+
+
+		</div>
+		<div class="text-center mt-1">
+			<a href="" class="btn btn-danger btn-sm text-white"> View All</a>
+
+		</div>
+	</div>
+	<!-- End Old Book -->
+
+	<%@ include file="all_component/footer.jsp"%>
+</body>
+</html>

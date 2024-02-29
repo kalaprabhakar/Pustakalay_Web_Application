@@ -1,0 +1,72 @@
+<%@page import="com.kuu.beans.Book_Order"%>
+<%@page import="java.util.List"%>
+<%@page import="com.kuu.dao.BookOrderDAOImpl"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Admin: All Orders</title>
+<%@ include file="allcss.jsp"%>
+</head>
+<body style="background-color: #f7e7e6">
+	<%@ include file="navbar.jsp"%>
+	<c:if test="${empty userobj }">
+		<c:redirect url="login.jsp">
+		</c:redirect>
+
+	</c:if>
+	
+	<h3 class="texr-center">Hello Admin</h3>
+
+	<table class="table table-striped">
+	<thead class="bg-primary text-white">
+		<tr>
+			<th scope="col">Order Id</th>
+			<th scope="col">Name</th>
+			<th scope="col">Email</th>
+			<th scope="col">Address</th>
+			<th scope="col">Phone No</th>
+			<th scope="col">Book Name</th>
+			<th scope="col">Author</th>
+			<th scope="col">Price</th>
+			<th scope="col">Payment Type</th>
+		</tr>
+		</thead>
+		<tbody>
+		<%
+		 
+		 BookOrderDAOImpl dao = new BookOrderDAOImpl();
+		List<Book_Order> list = dao.getBookAdmin();
+		for(Book_Order book : list){
+			
+			
+			%>
+			
+			<tr>
+				<th scope="row"><%=book.getOrderId() %></th>
+				<td><%=book.getBookName() %></td>
+				<td><%=book.getEmail() %></td>
+				<td><%=book.getFulladdr() %></td>
+				<td><%=book.getPhone() %></td>
+				<td><%=book.getBookName() %></td>
+				<td><%=book.getAuthor() %></td>
+				<td><%=book.getPrice() %></td>
+				<td><%=book.getPayment() %></td>
+			</tr>	
+			
+			<%
+		}
+	    
+		%>
+			
+	
+		</tbody>
+	</table>
+
+	<div style="margin-top: 250px">
+	<%@ include file="footer.jsp" %>
+	</div>
+</body>
+</html>

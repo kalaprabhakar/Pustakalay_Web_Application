@@ -1,0 +1,5 @@
+package com.kuu.dao;
+
+public class BookOrderDAOImpl implements IBookOrderADO {
+
+}

@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Setting Page</title>
+<%@ include file="all_component/allcss.jsp"%>
+</head>
+<body style="background-color: #f7e7e6">
+	<%@ include file="all_component/navbar.jsp"%>
+	<div class="container py-4">
+	<h3>Hello ${userobj.name }</h3>
+	<div class="row">
+	
+	<div class="col-md-12 text-center">
+	
+	
+	</div>
+	
+	</div>
+	
+	</div>
+
+
+</body>
+</html>

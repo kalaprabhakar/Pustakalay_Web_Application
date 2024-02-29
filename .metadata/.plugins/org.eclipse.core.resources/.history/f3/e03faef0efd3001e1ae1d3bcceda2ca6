@@ -1,0 +1,12 @@
+package com.kuu.dao;
+
+import com.kuu.beans.BookDetails;
+import com.kuu.beans.Cart;
+
+public interface ICartDAO {
+	
+	boolean addCart(Cart c);
+	
+	BookDetails getBookByUser(int id);
+
+}

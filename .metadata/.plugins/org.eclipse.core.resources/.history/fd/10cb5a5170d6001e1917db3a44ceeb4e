@@ -1,0 +1,43 @@
+package com.kuu.servlet;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+import com.kuu.beans.UserBO;
+
+@WebServlet("/updateprofile")
+public class UpdateProfile extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		int id = Integer.parseInt(request.getParameter("id"));
+		String name= request.getParameter("name");
+		String email = request.getParameter("email");
+		String phone = request.getParameter("phone");
+		String psw = request.getParameter("psw");
+		
+		UserBO user = new UserBO();
+		user.setId(id);
+		user.setName(name);
+		user.setEmail(email);
+		user.setPhone_no(phone);
+		user.setPassword(psw);
+		
+		try {
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}

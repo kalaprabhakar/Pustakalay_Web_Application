@@ -1,0 +1,100 @@
+package com.kuu.servlet;
+
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import com.kuu.beans.BookDetails;
+import com.kuu.beans.Book_Order;
+import com.kuu.beans.Cart;
+import com.kuu.dao.BookOrderDAOImpl;
+import com.kuu.dao.CartDAOImpl;
+import com.kuu.dao.IBookOrderADO;
+
+@WebServlet("/orderlist")
+public class OrderList extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		int id = Integer.parseInt(request.getParameter("id"));
+		String name = request.getParameter("name");
+		String email = request.getParameter("email");
+		String phone = request.getParameter("phone");
+		String addr = request.getParameter("addr");
+		String land = request.getParameter("land");
+		String city = request.getParameter("city");
+		String state = request.getParameter("state");
+		String zip = request.getParameter("zip");
+		String payment = request.getParameter("payment");
+
+		String fullAddress = addr + " , " + land + " , " + city + " , " + state + " , " + zip;
+
+		HttpSession session = request.getSession();
+		try {
+
+			CartDAOImpl dao = new CartDAOImpl();
+
+			List<Cart> list = dao.getBookByUser(id);
+			BookOrderDAOImpl dao2 = new BookOrderDAOImpl();
+
+			List<Book_Order> orderList = new ArrayList<Book_Order>();
+			Random r = new Random();
+			for (Cart c : list) {
+				Book_Order o = new Book_Order();
+				o.setOrderId("BOOK-ORD-00" + r.nextInt(1000));
+				o.setUserName(name);
+				o.setEmail(email);
+				o.setPhone(phone);
+				o.setFulladdr(fullAddress);
+				o.setBookName(c.getBookName());
+				o.setAuthor(c.getAuthor());
+				o.setPrice(c.getPrice());
+				o.setPayment(payment);
+				orderList.add(o);
+
+			}
+
+			if (payment.equals("noselect")) {
+
+				session.setAttribute("failedMsg", "Please Choose Payment Mode");
+				response.sendRedirect("checkout.jsp");
+
+			} else {
+
+				boolean flag = dao2.saveOrder(orderList);
+
+				if (flag) {
+					
+					response.sendRedirect("order_success.jsp");
+					
+
+				} else {
+					session.setAttribute("failedMsg", "Your Order Failed");
+					response.sendRedirect("checkout.jsp");
+
+				}
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		}
+
+	}
+
+}

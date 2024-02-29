@@ -1,0 +1,51 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Setting Page</title>
+<%@ include file="all_component/allcss.jsp"%>
+
+<style type="text/css">
+a{
+
+  text-decoration: none;
+  color: black;
+
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+</style>
+</head>
+<body style="background-color: #f7e7e6">
+	<%@ include file="all_component/navbar.jsp"%>
+	<div class="container py-4 text-center">
+		<h3>Hello ${userobj.name }</h3>
+		<div class="row p-5">
+
+			<div class="col-md-6">
+
+				<a href="#">
+					<div class="card">
+						<div class="card-body text-center">
+							<i class="fa-solid fa-book-open"></i>
+							<h3>Sell Old Book</h3>
+						</div>
+					</div>
+
+				</a>
+
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+package com.kuu.dao;
+
+import com.kuu.beans.Book_Order;
+
+public interface IBookOrderADO {
+	
+	int getOrderNo();
+	
+	boolean saveOrder(Book_Order book);
+
+}

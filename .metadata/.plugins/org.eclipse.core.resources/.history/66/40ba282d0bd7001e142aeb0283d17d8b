@@ -1,0 +1,94 @@
+package com.kuu.beans;
+
+import lombok.Data;
+
+@Data
+public class BookDetails {
+	
+	private Integer bookId;
+	private String bookname;
+	private String author;
+	private Double price;
+	private String bookCategory;
+	private String status;
+	private String photoName;
+	private String emial ;
+	
+	public BookDetails() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Integer getBookId() {
+		return bookId;
+	}
+
+	public void setBookId(Integer bookId) {
+		this.bookId = bookId;
+	}
+
+	public String getBookname() {
+		return bookname;
+	}
+
+	public void setBookname(String bookname) {
+		this.bookname = bookname;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	public String getBookCategory() {
+		return bookCategory;
+	}
+
+	public void setBookCategory(String bookCategory) {
+		this.bookCategory = bookCategory;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getPhotoName() {
+		return photoName;
+	}
+
+	public void setPhotoName(String photoName) {
+		this.photoName = photoName;
+	}
+
+	public String getEmial() {
+		return emial;
+	}
+
+	public void setEmial(String emial) {
+		this.emial = emial;
+	}
+
+	@Override
+	public String toString() {
+		return "BookDetails [bookId=" + bookId + ", bookname=" + bookname + ", author=" + author + ", price=" + price
+				+ ", bookCategory=" + bookCategory + ", status=" + status + ", photoName=" + photoName + ", emial="
+				+ emial + "]";
+	}
+	
+	
+
+}

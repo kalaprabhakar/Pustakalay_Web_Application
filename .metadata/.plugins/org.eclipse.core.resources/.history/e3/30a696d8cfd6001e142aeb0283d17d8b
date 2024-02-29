@@ -1,0 +1,14 @@
+package com.kuu.beans;
+
+public class Book_Order {
+
+	private Integer id;
+	private String userName;
+	private String email;
+	private String phone;
+	private String fulladdr;
+	private String payment;
+	
+	
+
+}

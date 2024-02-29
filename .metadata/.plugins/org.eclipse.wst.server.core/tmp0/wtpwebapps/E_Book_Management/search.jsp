@@ -1,0 +1,105 @@
+<%@page import="com.kuu.beans.UserBO"%>
+<%@page import="com.kuu.beans.BookDetails"%>
+<%@page import="java.util.List"%>
+<%@page import="com.kuu.dao.BookDAOImpl"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>All Recent Book</title>
+<%@ include file="all_component/allcss.jsp"%>
+</head>
+<body style="background-color: #f7e7e6">
+	<%@ include file="all_component/navbar.jsp"%>
+	<% 
+
+   UserBO user =(UserBO)session.getAttribute("userobj") ;
+
+%>
+	<div class="container">
+		<h3 class="text-center">All Recent Book</h3>
+		<div class="row">
+
+			<%
+			String ch = request.getParameter("ch");
+			BookDAOImpl dao = new BookDAOImpl();
+			List<BookDetails> list= dao.getBookBySearch(ch);
+			for (BookDetails book : list) {
+			%>
+			<div class="col-md-3.5">
+
+
+				<div class="card">
+					<div class="card-body text-center">
+						<img alt="" src="books/<%=book.getPhotoName()%>"
+							style="width: 150px; height: 200px" class="img-thumblin">
+						<p><%=book.getBookname()%></p>
+						<p><%=book.getAuthor()%></p>
+						<p>
+							<%
+							if (book.getBookCategory().equalsIgnoreCase("Old")) {
+							%>
+
+							Categories :
+							<%=book.getBookCategory()%></p>
+						<div class="row">
+							<a href="view_books.jsp?bid=<%=book.getBookId() %>" class="btn btn-success btn-sm ml-1">View Details</a> <a
+								href="" class="btn btn-danger btn-sm ml-1"><%=book.getPrice()%>
+								<i class="fa-solid fa-indian-rupee-sign"></i></a>
+
+						</div>
+
+						<%
+						} else {
+						%>
+
+						Categories :
+						<%=book.getBookCategory()%></p>
+						<div class="row">
+							<%
+						
+						if(user==null){
+							
+							%>
+							<a href="login.jsp" class="btn btn-danger btn-sm ml-1"><i
+								class="fa-solid fa-cart-shopping"></i>Add Cart</a>
+							<%
+						}else{
+							%>
+							<a href="cart?bid=<%=book.getBookId() %>&&uid=<%=user.getId() %>" class="btn btn-danger btn-sm ml-1"><i
+								class="fa-solid fa-cart-shopping"></i>Add Cart</a>
+							<%
+						}
+						
+						
+						%>
+							
+							 <a href="view_books.jsp?bid=<%=book.getBookId() %>"
+								class="btn btn-success btn-sm ml-1">View Details</a> <a href=""
+								class="btn btn-danger btn-sm ml-1"><%=book.getPrice()%> <i
+								class="fa-solid fa-indian-rupee-sign"></i></a>
+
+						</div>
+
+						<%
+						}
+						%>
+
+
+					</div>
+				</div>
+			</div>
+
+			<%
+			}
+			%>
+
+
+
+		</div>
+
+
+</body>
+</html>
